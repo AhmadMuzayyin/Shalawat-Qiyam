@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bacaan Qiyam</title>
+    <style>
+        @font-face {
+            font-family: 'SakkalMajalla';
+            src: url('fonts/Sakkal-Majalla-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        :root {
+            /* Black & White Clean Theme */
+            --bg-color: #FFFFFF;
+            --text-color: #000000;
+            --paper-color: #FFFFFF;
+            --border-color: #EEEEEE;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'SakkalMajalla', 'Amiri', 'Traditional Arabic', serif;
+            font-size: 34px;
+            line-height: 1.8;
+            padding: 20px 10px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: var(--paper-color);
+            padding: 20px 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .corner {
+            display: none;
+        }
+
+        h1,
+        h2,
+        .title {
+            color: #000000;
+            font-size: 38px;
+            margin-bottom: 25px;
+            margin-top: 25px;
+            padding: 8px 30px;
+            display: inline-block;
+            border-bottom: 2px solid #000000;
+            font-weight: bold;
+        }
+
+        .bismillah {
+            font-size: 38px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: #000000;
+            font-weight: bold;
+            display: block;
+        }
+
+        /* Qasidah — table layout agar kolom selalu rata kanan, kiri, dan tengah */
+        .qasidah-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            table-layout: fixed;
+            border: none;
+            margin: 15px 0;
+        }
+
+        .qasidah-table td {
+            width: 50%;
+            font-size: clamp(26px, 4vw, 42px);
+            vertical-align: middle;
+            border: none;
+            color: #000000;
+        }
+
+        /* Padding terpisah: Diba dan Qiyam */
+        .qasidah-diba td {
+            padding: 4px 10px;
+        }
+
+        .qasidah-qiyam td {
+            padding: 4px 10px;
+        }
+
+        .qasidah-right,
+        .qasidah-left {
+            text-align: justify;
+        }
+
+        /* Trick: paksa justify single-line bekerja di Android WebView */
+        .qasidah-right::after,
+        .qasidah-left::after {
+            content: '';
+            display: inline-block;
+            width: 100%;
+        }
+
+        /* Visual dividers between sections */
+        .section-divider {
+            text-align: center;
+            margin: 25px 0;
+            color: #000000;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            display: inline-block;
+            width: 30%;
+            height: 1px;
+            background: #CCCCCC;
+            margin: 0 15px;
+        }
+
+        .paragraph {
+            text-align: justify;
+            text-align-last: center;
+            margin-bottom: 15px;
+            font-size: 28px;
+            padding: 0 10px;
+            line-height: 2.2;
+            color: #000000;
+        }
+
+        .symbol {
+            color: #000000;
+            font-weight: bold;
+            font-size: 24px;
+            margin: 0 10px;
+            vertical-align: middle;
+        }
+
+        .doa {
+            text-align: justify;
+            font-size: 28px;
+            line-height: 2.2;
+            color: #000000;
+        }
+
+        /* === RESPONSIVE: Tablet & HP besar (<=768px) === */
+        @media (max-width: 768px) {
+            body {
+                font-size: 26px;
+                padding: 0px;
+                background-image: none;
+            }
+
+            .container {
+                padding: 10px 5px;
+            }
+
+            .container::before {
+                display: none;
+            }
+
+            h1, h2, .title {
+                font-size: 28px;
+                padding: 8px 20px;
+            }
+
+            .bismillah {
+                font-size: 28px;
+            }
+
+            .qasidah-table td {
+                font-size: 26px;
+            }
+
+            .paragraph {
+                font-size: 20px;
+            }
+
+            .symbol {
+                font-size: 22px;
+            }
+
+            .doa {
+                font-size: 26px;
+            }
+
+            .section-divider {
+                font-size: 22px;
+            }
+
+            .section-divider::before,
+            .section-divider::after {
+                width: 10%;
+            }
+        }
+
+        /* === RESPONSIVE: HP sedang (<=480px) === */
+        @media (max-width: 480px) {
+            body {
+                font-size: 22px;
+            }
+
+            h1, h2, .title {
+                font-size: 24px;
+                padding: 6px 15px;
+            }
+
+            .bismillah {
+                font-size: 24px;
+            }
+
+            .qasidah-table td {
+                font-size: 22px;
+            }
+
+            .paragraph {
+                font-size: 17px;
+            }
+
+            .symbol {
+                font-size: 19px;
+            }
+
+            .doa {
+                font-size: 22px;
+            }
+
+            .section-divider {
+                font-size: 19px;
+            }
+        }
+
+        /* === RESPONSIVE: HP kecil (<=360px) === */
+        @media (max-width: 360px) {
+            body {
+                font-size: 18px;
+            }
+
+            h1, h2, .title {
+                font-size: 20px;
+                padding: 5px 10px;
+            }
+
+            .bismillah {
+                font-size: 20px;
+            }
+
+            .qasidah-table td {
+                font-size: 18px;
+            }
+
+            .paragraph {
+                font-size: 15px;
+            }
+
+            .symbol {
+                font-size: 16px;
+            }
+
+            .doa {
+                font-size: 18px;
+            }
+
+            .section-divider {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+
+        <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+
+        <div class="title">مَوْلِدُ الدِّيْبَعِى</div>
+
+        <!-- Qasidah Section 1 -->
+        <table class="qasidah-table qasidah-diba">
+            <tr>
+                <td class="qasidah-right">يَارَبِّ صَـــــلِّ عَليٰ مُحَمَّــــــــــدْ</td>
+                <td class="qasidah-left">يَارَبِّ صَلِّ عَلَيْـــــــــهِ وَسَــــــلِّمْ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَارَبِّ بَلِّغْـــــــــهُ الْوَسِيْــــــــــــلَةْ</td>
+                <td class="qasidah-left">يَارَبِّ خُصَّـــــهٗ بِالْفَضِيْــــــــــــلَةْ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَارَبِّ وَارْضَ عَنِ الصَّحَـــــــابَةْ</td>
+                <td class="qasidah-left">يَارَبِّ وَارْضَ عَنِ السُّـــــــــلاَلَةْ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَارَبِّ وَارْضَ عَنِ الْمَشَــــــــايِخْ</td>
+                <td class="qasidah-left">يَارَبِّ فَارْحَـــــــمْ وَالِدِيْنَــــــــــــا</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَارَبِّ وَارْحَمْـــــــــنَا جَمِيْـــــــــــعًا</td>
+                <td class="qasidah-left">يَارَبِّ وَارْحَـــــــــــمْ كُلَّ مُسْــــلِمْ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَارَبِّ وَاغْفِـــــــــرْ لِكُلِّ مُــــذْنِبْ</td>
+                <td class="qasidah-left">يَارَبِّ لَاتَقْطَـــــــــعْ رَجَـــــــــــانَا</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَارَبِّ يَاسَامِــــــــــعْ دُعَــــــــــانَا</td>
+                <td class="qasidah-left">يَارَبِّ بَلِّغْـــــــــــــــــــــــنَا نَزُوْرُهْ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَارَبِّ تَغْشَــــــــــــــــــــانَا بِنُوْرِهْ</td>
+                <td class="qasidah-left">يَارَبِّ حِفْـــــــــــــظَانَكْ وَاَمَانَكْ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَارَبِّ وَاسْـــــــــكِنَّا جِـــــــنَانَكْ</td>
+                <td class="qasidah-left">يَارَبِّ أَجِــرْنَا مِنْ عَــــــــــذَابِكْ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَارَبِّ وَارْزُقْنَـــــــــا الشَّــــــهَادَةْ</td>
+                <td class="qasidah-left">يَارَبِّ حِطْـــــــنَا بِالسَّعَـــــــــادَةْ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَارَبِّ وَاصْــــلِحْ كُلَّ مُصْـــــــلِحْ</td>
+                <td class="qasidah-left">يَارَبِّ وَاكْــــــــــفِ كُلَّ مُـــؤْذِيْ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَارَبِّ نَخْــــــــتِمْ بِالْمُشَـــــــــــفَّعْ</td>
+                <td class="qasidah-left">يَارَبِّ صَلِّ عَلَيْـــــــــهِ وَسَــــــلِّمْ</td>
+            </tr>
+        </table>
+
+        <div class="section-divider"><span>•</span></div>
+
+        <!-- Ayat Section -->
+        <div class="paragraph">لَقَدْ جَاۤءَكُمْ رَسُوْلٌ مِّنْ اَنْفُسِكُمْ عَزِيْزٌ عَلَيْهِ مَا عَنِتُّمْ حَرِيْصٌ
+            عَلَيْكُمْ بِالْمُؤْمِنِيْنَ رَءُوْفٌ رَّحِيْمٌ <span class="symbol">•</span> فَاِنْ تَوَلَّوْا فَقُلْ
+            حَسْبِيَ اللَّهُ لَا اِلٰهَ إِلَّا هُوَ ۖ عَلَيْهِ تَوَكَّلْتُ ۖ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيْمِ <span
+                class="symbol">•</span></div>
+
+        <div class="section-divider"><span>•</span></div>
+
+        <!-- Story Paragraph Section -->
+        <div class="paragraph">فَاهْتَزَّ الْعَرْشُ طَرَبًا وَاسْتِبْشَارًا <span class="symbol">•</span> وَازْدَادَ
+            الْكُرْسِيُّ هَيْبَةً وَوَقَارًا <span class="symbol">•</span> وَامْتَلَأَتِ السَّمٰوَاتُ أَنْوَارًا <span
+                class="symbol">•</span> وَضَجَّتِ الْمَلَآئِكَةُ تَهْلِيْلًا وَتَمْجِيْدًا وَاسْتِغْفَارًا <span
+                class="symbol">•</span> سُبْحَانَ الله وَالْحَمْدُ ِللهِ وَلَآإِلٰهَ إِلاَّ اللهُ وَاللهُ أَكْبَرْ ٣×
+            <span class="symbol">•</span> وَلَمْ تَزَلْ أُمُّهٗ تَرٰى أَنْوَاعًا مِنْ فَخْرِهِ وَفَضْلِهِ <span
+                class="symbol">•</span> إِلىٰ نِهَايَةِ تَمَامِ حَمْلِهِ <span class="symbol">•</span> فَلَمَّا اشْتَدَّ
+            بِهَا الطَّلْقُ <span class="symbol">•</span> بِـإِذْنِ رَبِّ الْخَلْقِ <span class="symbol">•</span>
+            وَضَعَتِ الْحَبِيْبَ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ <span class="symbol">•</span> سَاجِدًا شَاكِـرًا
+            حَامِدًا كَأَنَّهُ الْبَدْرُ فِيْ تَمَامِهِ
+        </div>
+
+        <div class="section-divider"><span>•</span></div>
+
+        <!-- Qasidah Section 2 -->
+        <table class="qasidah-table qasidah-qiyam">
+            <tr>
+                <td class="qasidah-right">يَانَبِـــــــــــــــــــــى سَلَامٌ عَلَيْكَ</td>
+                <td class="qasidah-left">يَارَسُوْلَ سَـــــــــلَامٌ عَلَيْــــــــكَ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَاحَبِيْبْ سٰـــــــــلَامٌ عَلَيْـــــــكَ</td>
+                <td class="qasidah-left">صَـــــــــلَوٰاتُ اللهِ عَلَيْـــــــــــكَ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">اَشْرَقَ الْبَــــدْرُ عَـلَيْــــــــــــــــــنَا</td>
+                <td class="qasidah-left">فَاخْتَــــفَــــتْ مِنْـــــــــــهُ الْبُــــدُوْرُ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">مِثْلَ حُسْنِــــــــكْ مَا رَاَيْــــــــنَا</td>
+                <td class="qasidah-left">قَــــطُّ يَاوَجْــــهَ السُّـــــــــــــرُوْرِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">اَنْتَ شَمْـــــــــسٌ اَنْتَ بَــــــــدْرٌ</td>
+                <td class="qasidah-left">اَنْتَ نُـــــــــــوْرٌ فَــــــوْقَ نُــــوْرٍ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">اَنْتَ اِكْسِـــــــيْرٌ وَغَــالِــــــــــــي</td>
+                <td class="qasidah-left">اَنْتَ مِصْبَـــــــــاحُ الصُّـــــــدُوْرِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَاحَبِيْبِـــــــــيْ يَامُـــــــــــــــحَمَّدُ</td>
+                <td class="qasidah-left">يَاعَرُوْسَ الْخَـــــــــافِقَــــــــــــيْنِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَامُؤَيَّدْ يَامُمَجَّــــــــــــــــــــــــــدُ</td>
+                <td class="qasidah-left">يَاإِمَامَ الْقِبْلَتَــــــــــــــــــــــــــــيْنِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">مَنْ رَاٰى وَجْهَــــــــكَ يَسْعَــــــدُ</td>
+                <td class="qasidah-left">يَاكَـــــــــــــرِيْمَ الْــــــــــــــوَالِدَيْنِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">حَوْضُكَ الصَّــــــافِى الْمُبَــــــــرَّدُ</td>
+                <td class="qasidah-left">وِرْدُنَا يَوْمَ النُّشُـــــــــــــــــــــوْرِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">مَارَأَيْـــــــــنَا الْعِيْسَ حَنَّـــــــــتْ</td>
+                <td class="qasidah-left">بِالسُّـــــــــرٰى إِلاَّ اِلَيْــــــــــــــكَ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">وَالْغَــــماَمَةْ قَـــــدْ أَظَلَّــــــــــــتْ</td>
+                <td class="qasidah-left">وَالْمَـــــــــلاَ صَــــــــــــــلَّوْعَلَيْكَ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">وَاَتَاكَ الْعُـــــــــوْدُ يَبْــــــــــــــكِى</td>
+                <td class="qasidah-left">وَتَـــــــــذَلَّلْ بَيْنَ يَــــــــــــــدَيْكَ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">وَاسْتَجَـــــــــارَتْ يَاحَبِيْــــــــبِي</td>
+                <td class="qasidah-left">عِنْدَكَ الظَّــــــــــبْيُ النُّـــــــــفُوْرُ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">عِنْدَ مَاشَـــــــــدُّوْا الْمَحَامِــــــلْ</td>
+                <td class="qasidah-left">وَتَنَادَوْا لِلــــــــ-رَّحِيْـــــــــــــــــلِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">جِئْتُهُمْ وَالدَّمْـــــــــعُ سَائِــــــــــلْ</td>
+                <td class="qasidah-left">قُلْـــــــــتُ قِفْ لِى يَادَلِيْــــــــلُ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">وَتَحَمَّلْ لِيْ رَسَــــــــــــــائِــــــــلْ</td>
+                <td class="qasidah-left">اَيُّهَا الشَّــــــــــــــوْقُ الْجَـــزِيْلُ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">نَحْوَهَا تِيْـــــــــكَ الْمَنَـــــــــــازِلْ</td>
+                <td class="qasidah-left">بِالْعَشِــــــــيِّ وَالْبُكُــــــــــــــــوْرُ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">كُلُّ مَـــنْ فِى الْكَـــوْنِ هَامُـــــوْا</td>
+                <td class="qasidah-left">فِيْـــــــــــكَ يَابَاهِى الْجَبِـــــــــيْنِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">وَلَهُمْ فِيْــــــــــــكَ غَــــــــــــــرَامُ</td>
+                <td class="qasidah-left">وَاشْـــــــــتِيَاقٌ وَحَنِـــــــــيْنُ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">فِى مَعَــــــــــــــانِيْــــــــــكَ الْأَنَامُ</td>
+                <td class="qasidah-left">قَدْتَبَدَّتْ حَـــــــــــآئِـــــــــــــرِيْنَ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">اَنْتَ لِلرُّسْـــــــــلِ خِتَـــــــــــــامُ</td>
+                <td class="qasidah-left">اَنْتَ لِلْمَـــــــــوْلىٰ شَكُـــــــــــوْرُ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">عَبْدُكَ الْمِسْــــــــكِيْنُ يَرْجُــــــوْ</td>
+                <td class="qasidah-left">فَضْلَكَ الْجَـــــــــمَّ الْغَفِـــــــــــيْرَ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">فِيْكَ قَدْ أَحْسَـــــــــنْتُ ظَنِّــــيْ</td>
+                <td class="qasidah-left">يَابَشِــــــــــــــيْرُ يَانَــــــــــــــذِيْرُ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">فَأَغِثْنِيْ وَأَجِـــــــــــــــرْنِـــــــــــيْ</td>
+                <td class="qasidah-left">يَامُجِيْرُ مِنَ السَّــــــــــــــعِــــــيْرِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَاغِــــــــــــــيَاثِي يَامَـــــــــلاَذِيْ</td>
+                <td class="qasidah-left">فِيْ مُهِمَّاتِ الْأُمُــــــــــــــــــــــوْرِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">سَعْدَ عَبْــــــــدٌ قَدْ تَمَــــــــــــلىّٰ</td>
+                <td class="qasidah-left">وَانْجَــــــلىٰ عَنْــــــــــــــهُ الْحَزِيْنُ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">فِيْكَ يَابَــــــــــــــدْرٌتَجَــــــــــــلىّٰ</td>
+                <td class="qasidah-left">فَلَكَ الْوَصْـــــــــفُ الْحَسِــــــيْنُ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">لَيْـــــــــسَ أَزْكىٰ مِنْكَ أَصْــــــلاً</td>
+                <td class="qasidah-left">قَـــــــطُّ يَاجَدَّ الْحُــــــــــــــسَيْنِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">فَعَلَيْـــــــــكَ اللهُ صَــــــــــــــلىّٰ</td>
+                <td class="qasidah-left">دَآئِماً طُـــــــــوْلَ الدُّهُـــــــــــــوْرِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">يَاوَلِيَّ الْحَــــــــــــــسَنَــــــــــاتِ</td>
+                <td class="qasidah-left">يَارَفِيْـــــــــعَ الدَّرَجَـــــــــــــــــاتِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">كَفِّرْ عَنِّـــــــي الذُّنُــــــــــــــــوْبَ</td>
+                <td class="qasidah-left">وَاغْـــــــفِرْعَنِّي سَـــــــيِّئَــــــــاتِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">أَنْتَ غَـــــــــفَّارُ الْخَـــــــــــطَايَا</td>
+                <td class="qasidah-left">وَالذُّنُوْبِ الْمُـــــــــوْبِقَــــــــــــاتِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">أَنْتَ سَـــــــــتَّارُ الْمَسَــــــــاوِيْ</td>
+                <td class="qasidah-left">وَمُقِيْــــــــلُ الْعَــــــــــــــــــثَرَاتِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">عَالِــــــــــــــمُ السِّــــــــرِّ وَأَخْفىٰ</td>
+                <td class="qasidah-left">مُسْتَجِيْـــــــــبُ الدَّعَـــــــــوَاتِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">رَبِّ فَارْحَمْـــــــــنَا جَمِيْـــــــــــــعًا</td>
+                <td class="qasidah-left">وَامْحُ عَنَّا السَّـــــــــيِّـــــــــــئَاتِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">صَــــــلىّٰ اللهُ عَلىٰ مُحَمَّــــــــــدٍ</td>
+                <td class="qasidah-left">عَــــــــدَّ تَحْرِيْرِ السُطُــــــــــــوْرِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">اَحْمَــــــــدَ الْهَادِيْ مُحَمَّـــــــــــدْ</td>
+                <td class="qasidah-left">صَـــــــــاحِبَ الْوَجْهِ الْمُنِــــــــيْرِ</td>
+            </tr>
+            <tr>
+                <td class="qasidah-right">رَبِّ فَارْحَمْنَاجَمِيْــــــــــــــــــــــــعًا</td>
+                <td class="qasidah-left">بِجَمِيْعِ الصَّالِحَــــــــــــــــــــــــاتِ</td>
+            </tr>
+        </table>
+
+        <div class="section-divider"><span>•</span></div>
+
+        <!-- Title 3 -->
+        <div class="title">دُعَاء</div>
+        <!-- Doa Section -->
+        <div class="paragraph doa">اَلْحَمْدُ ِللهِ رَبِّ الْعَالَمِيْنَ <span class="symbol">•</span> اَللّٰهُمَّ صَلِّ
+            وَسَلِّمْ عَلٰى سَيِّدِنَا مُحَمَّدٍ وَ عَلىٰ اٰلِهٖ وَصَحْبِهٖ أَجْمَعِيْن <span class="symbol">•</span>
+            جَعَلَنَا اللهُ وَإِيَاكُمْ مِمَّنْ يَسْتَوْجِبُ شَفَاعَتَهُ <span class="symbol">•</span> وَيَرْجُوْ
+            بِذٰلِكَ رَحْمَتَهُ وَرَأْفَتَهُ <span class="symbol">•</span> أَللّٰهُمَّ بِحُرْمَةِ هٰذَا النَّبِيِّ
+            الْكَرِيْمِ <span class="symbol">•</span> وَاٰلِهِ وَأَصْحَابِهِ السَّالِكِيْنَ عَلىٰ مَنْهَجِهِ الْقَوِيْمِ
+            <span class="symbol">•</span> إِجْعَلْنَا مِنْ خِيَارِ أُمَّتِهٖ <span class="symbol">•</span> وَاسْتُرْنَا
+            بِذَيْلِ حُرْمَتِهِ <span class="symbol">•</span> وَاحْشُـرْنَا غَدًا فِيْ زُمْرَتِهِ <span
+                class="symbol">•</span> وَاسْتَعْمِلْ أَلْسِنَتَنَا فِيْ مَدْحِهٖ وَنُصْـرَتِهِ <span
+                class="symbol">•</span> وَأَحْيِنَا مُتَمَسِّكِيْنَ بِسُنَّتِهِ وَطَاعَتِهِ <span
+                class="symbol">•</span> وَأَمِتْنَا عَلىٰ حُبِّهٖ وَجَمَاعَتِهِ <span class="symbol">•</span>
+            أَللّٰهُمَّ أَدْخِلْنَا مَعَهُ الْجَنَّةَ فَإِنَّهُ أَوَّلُ مَنْ يَدْخُلُهَا <span class="symbol">•</span>
+            وَأَنْزِلْنَا مَعَهٗ فِيْ قُصُوْرِهَا <span class="symbol">•</span> فَإِنَّهُ أَوَّلُ مَنْ يَنْزِلُهَا <span
+                class="symbol">•</span> وَارْحَمْنَا يَوْمَ يَشْفَعُ لِلْخَلَآئِقِ فَتَرْحَمُهَا <span
+                class="symbol">•</span> أَللّٰهُمَّ ارْزُقْنَا زِيَارَتَهٗ فِيْ كُلِّ سَنَةٍ <span
+                class="symbol">•</span> وَلاَ تَجْعَلْنَا مِنْ الْغَافِلِيْنَ عَنْكَ وَلاَ عَنْهُ قَدْرَ سِنَةٍ <span
+                class="symbol">•</span> أَللّٰهُمَّ لاَ تَجْعَلْ فِيْ مَجْلِسِنَا هٰذَا أَحَدًا إِلاَّ غَسَلْتَ بِمَاءِ
+            التَّوْبَةِ ذُنُوْبَهُ <span class="symbol">•</span> وَسَتَرْتَ بِرِدَآءِ الْمَغْفِرَةِ عُيُوْبَهُ <span
+                class="symbol">•</span> اَللّٰهُمَّ إِنَّهٗ كَانَ مَعَنَا فِي السَّنَةِ الْمَاضِيَةِ <span
+                class="symbol">•</span> إِخْوَانٌ مَنَعَهُمُ اْلقَضَآءُ عَنِ الْوُصُوْلِ اِلٰى مِثْلِهَا <span
+                class="symbol">•</span> فَلاَ تَحْرِمْهُمْ مِنْ ثَوَابِ هٰذِهِ السَّاعَةِ وَفَضْلِهَا <span
+                class="symbol">•</span> اَللّٰهُمَّ ارْحَمْنَا إِذَا صِرْنَا مِنْ أَصْحَابِ الْقُبُوْرِ <span
+                class="symbol">•</span> وَوَفِّقْنَا لِعَمَلٍ صَالِحٍ يَبْقٰى سَنَاهُ عَلىٰ مَمَرِّ الدُّهُوْرِ <span
+                class="symbol">•</span> اَللّٰهُمَّ اجْعَلْنَا لِاٰلَآئِكَ ذَاكِرِيْنَ <span class="symbol">•</span>
+            وَلِنَعْمَآئِكَ شَاكِرِيْنَ <span class="symbol">•</span> وَلِيَوْمِ لِقَآئِكَ مِنَ الذَّاكِرِيْنَ <span
+                class="symbol">•</span> وَأَحْيِنَا بِطَاعَتِكَ مَشْغُوْلِيْنَ <span class="symbol">•</span> وَإِذَا
+            تَوَفَّيْتَنَا فَتَوَفَّنَا غَيْرَ مَفْتُوْنِيْنَ <span class="symbol">•</span> وَلاَ مَخْذُوْلِيْنَ <span
+                class="symbol">•</span> وَٱخْتِمْ لَنَا مِنْكَ بِخَيْرٍ أَجْمَعِيْنَ <span class="symbol">•</span>
+            اَللّٰهُمَّ اكْفِنَا شَرَّ الظَّالِمِيْنَ <span class="symbol">•</span> وَاجْعَلْنَا مِنْ فِتْنَةِ هٰذِهِ
+            الدُّنْيَا سَالِمِيْنَ <span class="symbol">•</span> اَللّٰهُمَّ اجْعَلْ هٰذَا الرَّسُوْلَ الْكَرِيْمَ لَنَا
+            شَفِيْعًا <span class="symbol">•</span> وَارْزُقْنَا بِهِ يَوْمَ الْقِيَامَةِ مَقَامًا رَفِيْعًا <span
+                class="symbol">•</span> اَللّٰهُمَّ اسْقِنَا مِنْ حَوْضِ نَبِيِّكَ مُحَمَّدٍ صَلَّى اللهُ عَلَيْهِ
+            وَسَلَّمَ شَرْبَةً هَنِيْئَةً لاَ نَظْمَأُ بَعْدَهَا أَبَدًا <span class="symbol">•</span> وَاحْشُــرْنَا
+            تَحْتَ لِوَآئِهِ غَدًا <span class="symbol">•</span> اَللّٰهُمَّ اغْفِرْ لَنَا بِهٖ وَلِاٰبـَآئِنَا
+            وَلِأُمَّهَآتِنَا وَلِمَشَايِخِنَا وَلِمُعَلِّمِيْنَا <span class="symbol">•</span> وَذَوِي الْحُقُوْقِ
+            عَلَيْنَا وَلِمَنْ أَجْرٰى هٰذَا الْخَيْرَ فِيْ هٰذِهِ السَّاعَةِ <span class="symbol">•</span> وَلِجَمِيْعِ
+            الْمُؤْمِنِيْنَ وَالْمُؤْمِنَاتِ <span class="symbol">•</span> وَالْمُسْلِمِيْنَ وَالْمُسْلِمَاتِ <span
+                class="symbol">•</span> اَلْأَحْيَآءِ مِنْهُمْ وَالْأَمْوَاتِ <span class="symbol">•</span> إِنَّكَ
+            كَرِيْمٌ مُجِيْبُ الدَّعَوَاتِ <span class="symbol">•</span> وَقَاضِــــيَ الْحَاجَاتِ <span
+                class="symbol">•</span> وَغَافِرُ الذُّنُوْبِ وَالْخَطِيْئَاتِ <span class="symbol">•</span> يَاأَرْحَمَ
+            الرَّاحِمِيْنَ <span class="symbol">•</span> وَصَلَّى اللهُ عَلىٰ سَيِّدِنَا مُحَمَّدٍ وَعَلىٰ اٰلِهِ
+            وَصَحْبِهٖ وَسَلَّمَ <span class="symbol">•</span> سُبْحَانَ رَبِّــكَ رَبِّ الْعِزَّةِ عَمَّا يَصِفُوْنَ
+            <span class="symbol">•</span> وَسَلاَمٌ عَلىٰ الْمُرْسَلِيْنَ <span class="symbol">•</span> وَالْحَمْدُ
+            ِللهِ رَبِّ الْعَالَمِيْنَ <span class="symbol">•</span>
+        </div>
+        <div class="section-divider"><span>•</span></div>
+    </div>
+</body>
+
+</html>
